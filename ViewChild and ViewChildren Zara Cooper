@@ -1,0 +1,23 @@
+Zara Cooper
+ZaraCooper
+Software developer and technical writer.
+Understanding the ViewChild and ViewChildren decorators in Angular 10
+August 17, 2020 5 min read 
+https://blog.logrocket.com/understanding-the-viewchild-and-viewchildren-decorators-in-angular-10/
+https://stackblitz.com/edit/view-child-examples?file=src%2Fapp%2Fview-child%2Fread-property-examples%2Fread-property-view-child.component.ts
+
+
+cd /media/tcma/SeagateBackupPlusDrive/angulardemo
+
+? mkdir ngtutorial && cd "$_"
+
+ng new view-child-examples_ZaraCooper2
+
+
+
+cd view-child-examples_ZaraCooper2
+
+
+
+Error: src/app/view-child/static-property-examples/static-property-view-child.ts:29:3 - error TS2564: Property 'nonStaticStateON' has no initializer and is not definitely assigned in the constructor.
+

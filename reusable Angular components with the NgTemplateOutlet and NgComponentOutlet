@@ -1,0 +1,7 @@
+How to Create Reusable & Configurable Angular Components
+Create reusable Angular components with the NgTemplateOutlet and NgComponentOutlet directives.
+https://javascript.plainenglish.io/creating-reusable-configurable-angular-components-b7fcba2f5f38
+https://gist.github.com/kagklis/ba91f0d8dea7b8d8a4417a72d0b5dd6d/raw/710bf32443ee538437d80f133bd527de3617bded/selection-list.component.html
+Angular cdkVirtualFor
+
+https://stackblitz.com/edit/reusable-components-using-ng-template-outlet?file=src%2Fapp%2Fapp.component.ts

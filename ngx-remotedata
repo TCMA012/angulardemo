@@ -1,0 +1,19 @@
+https://github.com/joanllenas/ngx-remotedata
+Instead of using a complex data structures we 
+use a single data type to express all possible request states:
+
+type RemoteData<T, E> = NotAsked | InProgress<T> | Failure<E, T> | Success<T>;
+
+This approach makes it impossible to create invalid states.
+
+
+    The basics
+
+    Plain old services
+
+    Ngrx 
+
+
+
+
+https://github.com/joanllenas/ngx-date-fns

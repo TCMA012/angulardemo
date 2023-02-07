@@ -1,0 +1,8 @@
+component library development
+@angular/cdk
+primeng
+our own components we took inspiration in Material https://github.com/angular/components/tree/main/src/material
+
+Be careful, there are two versions of Angular Material right now: Angular implementation and MDC
+
+ngx-bootstrap

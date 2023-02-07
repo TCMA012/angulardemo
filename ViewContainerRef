@@ -1,0 +1,27 @@
+Angular TemplateRef ViewContainerRef
+
+https://indepth.dev/posts/1052/exploring-angular-dom-manipulation-techniques-using-viewcontainerref
+In the Angular world a View is a fundamental building block of the application UI. It is the smallest grouping of elements which are created and destroyed together. Angular philosophy encourages developers to see the UI as a composition of Views, not as a tree of standalone HTML tags.
+
+Angular supports two types of views:
+
+Embedded Views which are linked to a Template
+Host Views which are linked to a Component
+
+
+
+shortcut comes in the form of two directives: 
+ngTemplateOutlet 
+ngComponentOutlet
+
+
+
+https://javascript.plainenglish.io/angular-elementref-templateref-viewcontainerref-8517b7ce3274
+https://gist.github.com/kagklis/746730125c040099a2bbd7864eb58521/raw/615b966efd49531e492bf31e8b8938378e0de1ec/element-ref-class.ts
+https://gist.github.com/kagklis/fe2f47dcea8015690025d5d83f1e3594/raw/7434f36f132c4b2780070f7b5c21f2f42009379b/element-ref-example.html
+https://gist.github.com/kagklis/23bb0b92c3a0eef79790a3146aca08c7/raw/11c7e00924cd25635387600c94090bbffe39d1bc/element-ref-example.ts
+https://gist.github.com/kagklis/fc7ce5a8862a7d84594e0310463aa7fa/raw/ca0e3764ab448e63c98bc4f9e8d290737706cd30/element-ref-alt-example.html
+https://gist.github.com/kagklis/965dfbe99e869275c32520a956dcd1ec/raw/ecabdfcb923e623f14052191fd9f686d0712fca3/element.directive.ts
+A ViewRef can be either a 
+component template (host view) or a 
+TemplateRef (embedded view).

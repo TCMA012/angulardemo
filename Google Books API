@@ -1,0 +1,18 @@
+https://github.com/Richardinho/angular-2-demo
+Google Books API 
+
+=
+
+Commentary on Kara Erickson's talk on Angular Forms
+Feb 20 2022
+http://blog.richardhunter.co.uk/index.php/article/19
+Kara Erickson presentation in AngularConnect 2017
+old
+https://github.com/kara
+
+A nested form is a component that comprises part of a form. A common example is an address component that contains separate fields for street, city, postcode etc. The motivation for having a nested form is similar to that of a Custom Form Component - to group related behaviour, for ease of re-use etc.
+
+There are two kinds of nested form components that Kara talks about.
+
+    Composite ControlValueAccessor Component: A ControlValueAccessor component which contains an arbitrary number of form controls instead of just one.
+    Sub Form Component: A Component that contains a form fragment but does not implement the ControlValueAccessor interface.
