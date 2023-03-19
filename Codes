@@ -1,0 +1,83 @@
+https://github.com/trungk18/jira-clone-angular
+ng-zorro and Akita
+
+Storybook helps you build UI components in isolation from your app's business logic, data, and context. That makes it easy to develop hard-to-reach states. Save these UI states as stories to revisit during development, testing, or QA.
+
+https://jira.trungk18.com/project/board
+
+
+
+https://github.com/trungk18/angular-spotify
+12, Nx workspace, ngrx, TailwindCSS and ng-zorro
+
+
+
+https://github.com/google/ground-platform
+https://github.com/google/ground-platform/tree/master/web
+
+
+
+
+https://github.com/BioPhoton/angular-star-rating
+
+
+
+
+
+
+
+https://github.com/hoebbelsB/ng-contextual-state
+
+
+
+
+https://stackoverflow.com/questions/75199383/how-can-i-apply-the-patchvalue-method-on-deeply-nested-form-groups-in-this-angul
+this.form.get('accountEssentials.accountInfo')?.patchValue(...)
+
+https://github.com/JeanMeche/angular-change-detection
+14.2
+https://jeanmeche.github.io/angular-change-detection/
+
+https://github.com/JeanMeche/angular-catalog
+POC with MatTree
+NgRx
+Tailwind
+
+
+
+A decentralized video platform
+YouTube
+ActivityPub-federated video streaming platform using P2P directly in your web browser
+https://joinpeertube.org/
+https://github.com/Chocobozzz/PeerTube/blob/develop/client/package.json
+14
+rxjs": "^7.3.0
+
+a document management system that transforms your physical documents into a searchable online archive so you can keep, well, less paper.
+https://github.com/paperless-ngx/paperless-ngx
+https://github.com/jonaswinkler/paperless-ng
+
+
+
+https://compodoc.app/
+The missing documentation tool for your Angular application
+Generate your Angular project documentation in seconds. 
+
+
+
+https://m2.material.io/design/material-studies/rally.html
+
+
+
+dynamically validate Angular reactive forms using class-validator library.
+https://github.com/abarghoud/ngx-reactive-form-class-validator
+
+
+
+Better than JSON.stringify
+https://github.com/Rich-Harris/devalue
+
+
+
+
+https://github.com/ngx-rocket/generator-ngx-rocket

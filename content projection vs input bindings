@@ -1,0 +1,13 @@
+content projection vs input bindings
+
+I usually use content projection whenever I can with the same logic that I can bake extension points into a template component and let injected components figure out the details. It makes things much simpler IMO. 
+I use input bindings for business/operational data, not configuration data.
+
+Content projection only makes sense when you have a container that can have different content which you can worry about slotting in at a latter point. 
+I prefer input bindings in most case it is easier to test and reason about.
+
+I do use content projection rarely. 
+it is a container for some unknown items. For example, I Created a Window Shade component that uses content projection. (A Window Shade is like an Accordion with a single fold)
+
+content projection is that the content is styled with the location from whence it came
+input parameters’re styled with the child component.
