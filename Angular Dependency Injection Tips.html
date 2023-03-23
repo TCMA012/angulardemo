@@ -1,0 +1,819 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 6.4.7.2 (Linux)"/>
+	<meta name="created" content="2023-03-22T19:29:14.219224144"/>
+	<meta name="changed" content="2023-03-22T20:06:11.158485391"/>
+	<style type="text/css">
+		h2.cjk { font-family: "Noto Serif CJK SC" }
+		h2.ctl { font-family: "Lohit Devanagari" }
+		pre.cjk { font-family: "Noto Sans Mono CJK SC", monospace }
+		code.cjk { font-family: "Noto Sans Mono CJK SC", monospace }
+	</style>
+</head>
+<body lang="en-CA" dir="ltr"><p><font size="4" style="font-size: 14pt"><b>Angular
+Dependency Injection Tips</b></font></p>
+<p>Armen Vardanyan</p>
+<p>Sep 1, 2019</p>
+<p><a href="https://codeburst.io/angular-dependency-injection-tips-ddb24b8244be">https://codeburst.io/angular-dependency-injection-tips-ddb24b8244be</a></p>
+<p style="font-variant: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><a name="d6f0"></a>
+<font color="#292929"><font face="source-serif-pro, Georgia, Cambria, Times New Roman, Times, serif"><font size="4" style="font-size: 14pt">Dependency
+Injection (DI) is one of the most important concepts that Angular
+incorporates. The design pattern helps as build web applications
+easier and limit tight coupling.</font></font></font></p>
+<p style="font-variant: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><a name="291c"></a>
+<font color="#292929"><font face="source-serif-pro, Georgia, Cambria, Times New Roman, Times, serif"><font size="4" style="font-size: 14pt">What
+DI provides:</font></font></font></p>
+<ul>
+	<li><p style="margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.62cm; orphans: 2; widows: 2"><a name="a9af"></a>
+	<font color="#292929"><font face="source-serif-pro, Georgia, Cambria, Times New Roman, Times, serif"><font size="3" style="font-size: 12pt">Sharing
+	functionality between different components of the app</font></font></font></p>
+	<li><p style="margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.62cm; orphans: 2; widows: 2"><a name="9ef2"></a>
+	<font color="#292929"><font face="source-serif-pro, Georgia, Cambria, Times New Roman, Times, serif"><font size="3" style="font-size: 12pt">providing
+	mocks instead of real connections when unit testing</font></font></font></p>
+	<li><p style="margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.62cm; orphans: 2; widows: 2"><a name="7b1f"></a>
+	<font color="#292929"><font face="source-serif-pro, Georgia, Cambria, Times New Roman, Times, serif"><font size="3" style="font-size: 12pt">not
+	bothering about instances of classes</font></font></font></p>
+	<li><p style="margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.62cm; orphans: 2; widows: 2"><a name="f004"></a>
+	<font color="#292929"><font face="source-serif-pro, Georgia, Cambria, Times New Roman, Times, serif"><font size="3" style="font-size: 12pt">Having
+	a clear understanding of the dependencies of a given class</font></font></font></p>
+	<p style="margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.62cm; orphans: 2; widows: 2">
+	</p>
+</ul>
+<p style="font-variant: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><a name="1f18"></a>
+<font color="#292929"><font face="source-serif-pro, Georgia, Cambria, Times New Roman, Times, serif"><font size="4" style="font-size: 14pt">But
+aside from providing services for fetching data, the Angular’s
+Dependency Injection Mechanism allows us to achieve some higher level
+of decoupling in our apps, and in this article I’m going to explore
+how.</font></font></font></p>
+<p style="margin-left: 1cm; margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2"><a name="dfaf"></a>
+<span style="font-variant: normal"><font color="#292929"><font face="source-serif-pro, Georgia, Cambria, Times New Roman, Times, serif"><font size="4" style="font-size: 13pt"><span style="letter-spacing: normal"><i><span style="font-weight: normal">If
+you are new to Angular or unfamiliar with the Dependency Injection, I
+suggest you first read what the&nbsp;</span></i></span></font></font></font></span><a href="https://angular.io/guide/dependency-injection" target="_blank"><span style="font-variant: normal"><font color="#292929"><font face="source-serif-pro, Georgia, Cambria, Times New Roman, Times, serif"><font size="4" style="font-size: 13pt"><span style="letter-spacing: normal"><i><u><span style="font-weight: normal">official
+documentation</span></u></i></span></font></font></font></span></a><span style="font-variant: normal"><font color="#292929"><font face="source-serif-pro, Georgia, Cambria, Times New Roman, Times, serif"><font size="4" style="font-size: 13pt"><span style="letter-spacing: normal"><i><span style="font-weight: normal">&nbsp;has
+to say on the topic.</span></i></span></font></font></font></span></p>
+<p style="margin-left: 1cm; margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<h2 class="western" style="margin-right: 1cm; margin-top: 0cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; line-height: 0.71cm; orphans: 2; widows: 2"><a name="944f"></a>
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><b>Providing
+the environment variables</b></font></font></font></h2>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="line-height: 0.71cm; orphans: 2; widows: 2"><a name="ee4b"></a>
+<span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">If
+you have been using Angular </span></span></font></font></font></span><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><span style="font-weight: normal">for
+a while, chances are you are familiar with&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="2" style="font-size: 9pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">environment.ts</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;files.
+These files are used to provide information about the environment in
+which our app is running. For example, if our app is running in a
+development environment, we want our data fetching services to point
+at the server app running on&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><a href="http://localhost:3000/api," target="_blank"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="2" style="font-size: 9pt"><span style="font-style: normal"><u><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">http://localhost:3000/api</span></span></span></u></span></font></font></font></span></a></code><a href="http://localhost:3000/api," target="_blank"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><u><span style="font-weight: normal">,</span></u></span></font></font></font></span></a><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;for
+example, and if it is running on the temporary server for the manual
+QA, we could want it to point to&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><a href="https://qa.local.com/api," target="_blank"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="2" style="font-size: 9pt"><span style="font-style: normal"><u><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">https://qa.local.com/api</span></span></span></u></span></font></font></font></span></a></code><a href="https://qa.local.com/api," target="_blank"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><u><span style="font-weight: normal">,</span></u></span></font></font></font></span></a><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;for
+instance. This is managed by Angular during build process with the
+usage of different environment files, for example, we could have two
+files called&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="2" style="font-size: 9pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">environment.ts</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;and&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="2" style="font-size: 9pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">environment.qa.ts</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;in
+our&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="2" style="font-size: 9pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">environments</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;folder,
+and when we run the command&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="2" style="font-size: 9pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">ng
+build --config qa</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><span style="font-weight: normal">,
+the Angular CLI will replace our&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="2" style="font-size: 9pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">environment.ts</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;file
+with&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="2" style="font-size: 9pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">environment.qa.ts</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;and
+the app will run in the&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="2" style="font-size: 9pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">QA</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;mode
+respectively.</span></span></font></font></font></span></p>
+<p style="font-variant: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><a name="6ab6"></a>
+<font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt">But
+what does DI have to do with this?</font></font></font></p>
+<p style="font-variant: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><a name="0cae"></a>
+<font color="#292929"><font face="Liberation Serif, serif"><font size="4" style="font-size: 14pt">Take
+a look at this component:</font></font></font></p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">import { Component, OnInit } from '@angular/core';</font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">import { environment } from 'src/environments/environment';</font></font></font>
+
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">@Component({</font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">selector: 'app-some',</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">templateUrl: './some.component.html',</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">styleUrls: ['./some.component.css']</span></span></font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">})</font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export class SomeComponent implements OnInit {</font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">constructor() { }</span></span></font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">ngOnInit() {</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">if (!environment.production) {</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">console.log('In development environment') {}</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">}</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">naive.environment.ts hosted with
+❤ by GitHub</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">A naive usage of the environment
+variables</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">Here we just import the
+environment.ts file and use its contents right away.</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">But what if we want to inject
+some other values inside this environment variables for unit testing?
+Also, have a look at this service that also makes use of the
+environment variables:</font></p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">import { environment } from 'src/environments/environment';</font></font></font>
+
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">@Injectable()</font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export class SomeService {</font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">constructor(</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private http: HttpClient,</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">) { }</span></span></font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">getData(): Observable&lt;any&gt; {</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">return this.http.get(environment.baseUrl + '/api/method');</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">}</font></font></font>
+<font color="#000000"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">naive.service.environment.ts hosted with ❤ by GitHub</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">Using environment variable to
+point at an API</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2"><a name="590c"></a>
+<font face="Liberation Serif, serif"><span style="font-variant: normal"><font color="#292929"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">Again,
+this looks very normal, but in reality this is not the best way to
+reference an environment variable. Imagine that this service is a
+part of a multiple project Angular application. So we have
+a&nbsp;</span></span></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><code class="western"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2">projects</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;folder,
+which contains different apps (web components, for instance, is a
+good example of such a complex app). Can we reuse this service in
+another project? Theoretically we can — just import it into another
+Angular module using the&nbsp;</span></span></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><code class="western"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2">providers</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;array,
+right? But here comes the problem — different projects can have
+different environments! We cannot just import one of them, but we
+still have to ensure that this service can be reused by as many
+components as possible. We can achieve this by using DI.</span></span></font></font></span></font></p>
+<p style="line-height: 0.71cm; orphans: 2; widows: 2"><a name="aeef"></a>
+<span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">There
+are several possible ways of achieving this functionality, but let’s
+start from the most simple one —&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">Injection
+Tokens</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">.</span></span></font></font></font></span></p>
+<p style="margin-left: 1cm; margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2"><a name="94b2"></a>
+<span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><i><span style="font-weight: normal">Injection
+tokens are an Angular concept which allow us to declare independent
+unique dependency injection tokens to inject values into other
+classes using the&nbsp;</span></i></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><i><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">Inject</span></span></span></i></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><i><span style="font-weight: normal">&nbsp;decorator.
+Read more about them&nbsp;</span></i></span></font></font></font></span><a href="https://angular.io/api/core/InjectionToken" target="_blank"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><i><u><span style="font-weight: normal">here</span></u></i></span></font></font></font></span></a><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><i><span style="font-weight: normal">.</span></i></span></font></font></font></span></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">All we have to do is just
+provide the value for our environment in a module:</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Mono, monospace">export const ENV = new
+InjectionToken('ENV');</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Mono, monospace">@NgModule({</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+   <font face="Liberation Mono, monospace">declarations: [</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+      <font face="Liberation Mono, monospace">AppComponent,</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+      <font face="Liberation Mono, monospace">SomeComponent</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+   <font face="Liberation Mono, monospace">],</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+   <font face="Liberation Mono, monospace">imports: [</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+      <font face="Liberation Mono, monospace">BrowserModule</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+   <font face="Liberation Mono, monospace">],</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+   <font face="Liberation Mono, monospace">providers: [</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+     <font face="Liberation Mono, monospace">{provide: ENV, useValue:
+environment}</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+   <font face="Liberation Mono, monospace">],</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+   <font face="Liberation Mono, monospace">bootstrap: [</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+      <font face="Liberation Mono, monospace">AppComponent</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+   <font face="Liberation Mono, monospace">]</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Mono, monospace">})</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Mono, monospace">export class AppModule { }</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">provide.env.ts hosted with ❤
+by GitHub</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif"><span style="font-variant: normal"><font color="#292929"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">As
+you see, we have provided the value for our environment variable
+under an&nbsp;</span></span></span></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><code class="western"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2">InjectionToken</span></span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">,
+so now we can use it in our service:</span></span></span></font></font></span></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">import { Injectable, Inject } from '@angular/core';</font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">import { HttpClient } from '@angular/common/http';</font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">import { Observable } from 'rxjs';</font></font></font>
+
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">import { ENV } from '../app.module';</font></font></font>
+
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">@Injectable()</font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export class SomeService {</font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">constructor(</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private http: HttpClient,</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">@Inject(ENV) private environment,</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">) { }</span></span></font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">getData(): Observable&lt;any&gt; {</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">return this.http.get(this.environment.baseUrl + '');</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">}</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">good.env.ts hosted with ❤ by
+GitHub</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2"><a name="e948"></a>
+<font face="Liberation Serif, serif"><span style="font-variant: normal"><font color="#292929"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">Notice
+how we no longer import the&nbsp;</span></span></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><code class="western"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2">environment.ts</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;file.
+Instead we bring the&nbsp;</span></span></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><code class="western"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2">ENV</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;token
+and allow the app itself decide what value will be passed on to the
+service, depending on the project in which it is being used.</span></span></font></font></span></font></p>
+<p style="line-height: 0.71cm; orphans: 2; widows: 2"><a name="f336"></a>
+<span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">But
+still, this is not the best solution. We did not provide a type for
+the&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">environment</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;private
+field, which is kind of self defeating — we need typings to make
+our code less error prone, and Angular can leverage typings to bring
+better DI — for example, we actually can get rid of
+the&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">Inject</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;decorator
+and the&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">InjectionToken</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;as
+a whole! Here’s what we are going to do: write a shell class to
+describe the interface of our environment variable, and then use it
+to provide the actual value. Here is an example of such a class:</span></span></font></font></font></span></p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export class Environment {</font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">production: boolean;</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">baseUrl: string;</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">// some other fields maybe?</span></span></font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">}</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">env.class.ts hosted with ❤ by
+GitHub</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif"><span style="font-variant: normal"><font color="#292929"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">In
+this class we described what our environment actually looks like. But
+we can also use this class as an Injection Token for injecting the
+environment variable! Just using&nbsp;</span></span></span></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><code class="western"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2">useValue</span></span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal">&nbsp;</span></font></font></span><span style="font-variant: normal"><font color="#292929"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">as
+a provider:</span></span></span></font></font></span></font></p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><font color="#292929">@NgModule({</font></font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">declarations: [</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">AppComponent,</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">SomeComponent</span></span></font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">],</span></span></font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">imports: [</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">BrowserModule</span></span></font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">],</span></span></font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">providers: [</span></span></font></font></font>
+<font color="#000000">     <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">{provide: Environment, useValue: environment}</span></span></font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">],</span></span></font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">bootstrap: [</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">AppComponent</span></span></font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">]</span></span></font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">})</font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export class AppModule { }</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-variant: normal"><font color="#292929"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">good.env.app.ts
+hosted with ❤ by GitHub</span></span></span></font></span></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">And
+in our service:</font></font></font></p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">@Injectable()</font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export class SomeService {</font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">constructor(</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private http: HttpClient,</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private environment: Environment,</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">) { }</span></span></font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">getData(): Observable&lt;any&gt; {</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">return this.http.get(this.environment.baseUrl + '');</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">}</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">good.service.env.ts
+hosted with ❤ by GitHub</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">This
+solution not only provides us with a cleaner, more usual DI
+mechanism, but also with static typing.</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">But
+there is still a very small problem. Consider this:</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">@Injectable()</font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export class SomeService {</font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">constructor(</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private environment: Environment,</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">) { }</span></span></font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">someMethod() {</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">this.environment.baseUrl = 'something else';</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">}</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">bad.ts
+hosted with ❤ by GitHub</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">Will
+yield this:</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><img src="Angular%20Dependency%20Injection%20Tips_html_23908e2c20b5521a.png" name="Image1" align="bottom" width="1083" height="50" border="0"/>
+</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">So
+we “accidentally” changed an environment variable. This is not a
+very big concern (developers don’t usually go around randomly
+reassigning environment variables), but we still want to reinforce
+that rule. It is pretty easy — just make the fields on our class
+readonly:</font></font></font></p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export class Environment {</font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">readonly production: boolean;</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">readonly baseUrl: string;</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">// some other fields maybe?</span></span></font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">}</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">what.ts
+hosted with ❤ by GitHub</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">Now
+we have the full power of DI, but are also protected against
+accidents.</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><b>Providing
+different services depending on the environment</b></font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">We
+now know how to provide the environment variables via DI, but what
+about switching between different services (while preserving the API)
+depending on the environment?</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">Imagine
+the following situation: we need some crash reports/usage statistics
+from our application when it is running. But the nature of the logs
+differs depending from the environment we are using: in the
+development environment we want to just log an error or a warning to
+the console; in the QA environment, we want to call an API which will
+collect our errors in an Excel file and send them to the management;
+and in production, we want a separate log file on the backend, so we
+call another API. So we come up with an idea of having a Logger
+service, which will handle this functionality. Here is a naive
+implementation of this service:</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><font color="#292929">@Injectable()</font></font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export class LoggerService {</font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">constructor(</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private environment: Environment,</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private http: HttpClient,</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">) { }</span></span></font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">logError(text: string): void {</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">switch (this.environment.name) {</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">case 'development': {</span></span></font></font></font>
+<font color="#000000">        <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">console.error(text);</span></span></font></font></font>
+<font color="#000000">        <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">break;</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">case 'qa': {</span></span></font></font></font>
+<font color="#000000">        <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">this.http.post(this.environment.baseUrl + '/api/reports', {text})</span></span></font></font></font>
+<font color="#000000">                 <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">.subscribe(/* handle http errors here*/);</span></span></font></font></font>
+<font color="#000000">        <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">break;</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">case 'production': {</span></span></font></font></font>
+<font color="#000000">        <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">this.http.post(this.environment.baseUrl + '/api/logs/errors', {text})</span></span></font></font></font>
+<font color="#000000">                 <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">.subscribe(/* handle http errors here*/);</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">}</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">straight.ts
+hosted with ❤ by GitHub</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><a name="1e47"></a>
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">This
+is pretty straightforward: receive an error text, check the
+environment, perform the respective action. But here are some
+problems I have with this solution:</font></font></font></p>
+<ul>
+	<li><p style="margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.62cm; orphans: 2; widows: 2"><a name="2d7a"></a>
+	<span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">We
+	are making checkings&nbsp;</span></span></span></font></font></font></span><strong><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><b>every&nbsp;</b></span></span></font></font></font></span></strong><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">time
+	the&nbsp;</span></span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">logError</span></span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;method
+	is called. This is pretty useless, because after the app is built,
+	the value of&nbsp;</span></span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">enviroment.name</span></span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;never
+	changes! The outcome of the&nbsp;</span></span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">switch</span></span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;statement
+	is always going to be the same, no matter how many times or in what
+	situations we call this method.</span></span></span></font></font></font></span></p>
+	<li><p style="margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.62cm; orphans: 2; widows: 2"><a name="7370"></a>
+	<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">The
+	implementation of the method itself looks pretty ugly, it is not as
+	straightforward as it may seem.</font></font></font></p>
+	<li><p style="margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.62cm; orphans: 2; widows: 2"><a name="e9c2"></a>
+	<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">What
+	if we need to log more different information? Do we have to write
+	all these checkings in every method?</font></font></font></p>
+</ul>
+<p style="line-height: 0.71cm; orphans: 2; widows: 2"><a name="80d0"></a>
+<span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">What
+do I suggest? Write separate&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">LoggerServices</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;for
+each scenario, and inject only one of them conditionally, depending
+on the environment, using a&nbsp;</span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">factory</span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">.
+Here’s how:</span></span></font></font></font></span></p>
+<pre class="western" style="font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; orphans: 2; widows: 2"><font color="#000000"><font size="3" style="font-size: 12pt">export class LoggerService {</font></font>
+<font color="#000000">  <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">logError(text: string): void { }</span></span></font></font>
+<font color="#000000">  <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">// maybe other methods like logWarning, or info</span></span></font></font>
+<font color="#000000"><font size="3" style="font-size: 12pt">}</font></font>
+
+<font color="#000000"><font size="3" style="font-size: 12pt">@Injectable()</font></font>
+<font color="#000000"><font size="3" style="font-size: 12pt">class DevelopLoggerService implements LoggerService {</font></font>
+<font color="#000000">  <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">logError(text: string) {</span></span></font></font>
+<font color="#000000">    <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">console.error(text);</span></span></font></font>
+<font color="#000000">  <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font>
+<font color="#000000"><font size="3" style="font-size: 12pt">}</font></font>
+
+<font color="#000000"><font size="3" style="font-size: 12pt">@Injectable()</font></font>
+<font color="#000000"><font size="3" style="font-size: 12pt">class QALoggerService implements LoggerService {</font></font>
+
+<font color="#000000">  <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">constructor(</span></span></font></font>
+<font color="#000000">    <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private http: HttpClient,</span></span></font></font>
+<font color="#000000">    <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private environment: Environment,</span></span></font></font>
+<font color="#000000">  <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">) {}</span></span></font></font>
+
+<font color="#000000">  <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">logError(text: string) {</span></span></font></font>
+<font color="#000000">    <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">this.http.post(this.environment.baseUrl + '/api/reports', {text})</span></span></font></font>
+<font color="#000000">                 <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">.subscribe(/* handle http errors here*/);</span></span></font></font>
+<font color="#000000">  <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font>
+<font color="#000000"><font size="3" style="font-size: 12pt">}</font></font>
+
+<font color="#000000"><font size="3" style="font-size: 12pt">@Injectable()</font></font>
+<font color="#000000"><font size="3" style="font-size: 12pt">class ProdLoggerService implements LoggerService {</font></font>
+
+<font color="#000000">  <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">constructor(</span></span></font></font>
+<font color="#000000">    <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private http: HttpClient,</span></span></font></font>
+<font color="#000000">    <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private environment: Environment,</span></span></font></font>
+<font color="#000000">  <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">) {}</span></span></font></font>
+
+<font color="#000000">  <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">logError(text: string) {</span></span></font></font>
+<font color="#000000">    <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">this.http.post(this.environment.baseUrl + '/api/logs/errors', {text})</span></span></font></font>
+<font color="#000000">                 <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">.subscribe(/* handle http errors here*/);</span></span></font></font>
+<font color="#000000">  <font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font>
+<font color="#000000"><font size="3" style="font-size: 12pt">}</font></font></pre><p style="margin-bottom: 0cm">
+split.ts hosted with ❤ by GitHub</p>
+<p style="margin-bottom: 0cm"><br/>
+
+</p>
+<p style="margin-bottom: 0cm"><br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">A
+breakdown of what we have done:</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">We
+strip the LoggerService down to just the declaration of it’s API,
+no implementation. We are going to use it as an injection token, and
+also as a hint for TS to know its interface.</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">We
+create separate classes for each environment, making sure to
+implement LoggerService on each of them, so we have the same API
+interface.</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">Each
+class performs the same methods, but in different ways. No need to
+check the environment.</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">Okay,
+but how are we going to tell our components what version of the
+LoggerService to use? Here is where factories come in play.</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">A
+factory is a pure function which receives dependencies as arguments
+and returns a value which will be provided for a given token. Here is
+how we are going to provide our LoggerService:</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><font color="#292929">export function loggerFactory(environment: Environment, http: HttpClient): LoggerService {</font></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">switch (environment.name) {</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">case 'develop': {</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">return new DevelopLoggerService();</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">case 'qa': {</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">return new QALoggerService(http, environment);</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">case 'prod': {</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">return new ProdLoggerService(http, environment);</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">}</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="font-variant: normal"><font color="#292929"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">factory.ts
+hosted with ❤ by GitHub</span></span></span></font></span></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">This is a function which will
+provide one of the Services depending on the runtime value of the
+environment variable, and do so once. Which is a very important
+thing, considering we wanted to reduce clutter in our code, and don’t
+perform unnecessary checkings.</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">But of course this is only part
+of the solution: we still need to tell Angular to use our factory and
+provide the necessary dependencies via the deps array.</font></p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">@NgModule({</font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">providers: [</span></span></font></font></font>
+<font color="#000000">     <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">{</span></span></font></font></font>
+<font color="#000000">       <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">provide: LoggerService,</span></span></font></font></font>
+<font color="#000000">       <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">useFactory: loggerFactory,</span></span></font></font></font>
+<font color="#000000">       <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">deps: [HttpClient, Environment], // we tell Angular to provide this dependencies to the factory as arguments</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">},</span></span></font></font></font>
+<font color="#000000">     <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">{provide: Environment, useValue: environment}</span></span></font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">],</span></span></font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">// other metadata</span></span></font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">})</font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export class AppModule { }</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">declaration.ts hosted with ❤
+by GitHub</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">The greatest thing about this
+solution is that we don’t need to change anything else in our app:
+all the components that used the LoggerService will continue to do
+so, as if the LoggerService still contains the actual implementation.</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export class SomeComponent implements OnInit {</font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">constructor(</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private logger: LoggerService,</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">) { }</span></span></font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">ngOnInit() {</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">try {</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">// do something that may throw an error</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">} catch (error) {</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">this.logger.logError(error.message); // no need to change anything - works the same wy as previously</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">}</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">usage.ts hosted with ❤ by
+GitHub</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif"><b>Providing global singletons</b></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">Angular makes sure that inside a
+given module, all components receive the same instance of a
+dependency. For example, if we provide a service on AppModule, then
+declare a SomeComponent on that module, and inject SomeService into
+it, and also into AnotherComponent declared in that same module, both
+SomeComponent and OtherComponent will receive the same instance of
+SomeService. But in different modules it is not going to be the same:
+each module has its own dependency injector, and will spawn different
+instances of the same service for different modules. But what if we
+want the same instance for every component, service or whatever that
+tries to use our dependency? So we, essentially, want a Singleton.</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">We can have a singleton using
+the useFactory again. At first we will have to implement a static
+getInstance method on our class, just like with usual singletons, and
+then call it from out factory. Let’s say we want to implement a
+simple runtime data store, like very basic redux. I won’t go into
+details and only implement the getInstance method:</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export class StoreService {</font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">// maybe store methods like dispatch, subscribe or others</span></span></font></font></font>
+
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">private static instance: StoreService = null;</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">static getInstance(): StoreService {</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">if (!StoreService.instance) {</span></span></font></font></font>
+<font color="#000000">      <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">StoreService.instance = new StoreService();</span></span></font></font></font>
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+
+<font color="#000000">    <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">return StoreService.instance;</span></span></font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">}</span></span></font></font></font>
+
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">}</font></font></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">n.ts hosted with ❤ by GitHub</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif">Nothing fancy here, but we have
+to tell Angular to call our getInstance method:</font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<pre class="western" style="margin-right: 1cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">export function storeFactory(): StoreService {</font></font></font>
+<font color="#000000">  <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">return StoreService.getInstance();</span></span></font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">}</font></font></font>
+
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">@NgModule({</font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">providers: [</span></span></font></font></font>
+<font color="#000000">     <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">{provide: StoreService, useFactory: storeFactory}</span></span></font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">],</span></span></font></font></font>
+<font color="#000000">   <font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt"><span style="font-style: normal"><span style="font-weight: normal">// other metadata</span></span></font></font></font>
+<font color="#000000"><font face="Liberation Mono, monospace"><font size="3" style="font-size: 12pt">})</font></font></font>
+<font face="Liberation Mono, monospace"><span style="font-variant: normal"><font color="#000000"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">export class AppModule { }</span></span></span></font></font></span></font>
+<font face="Liberation Serif, serif"><span style="font-variant: normal"><font color="#000000"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">ts.ts hosted with ❤ by GitHub</span></span></span></font></font></span></font></pre><p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">And
+it’s done. Now we can just inject StoreService into any component
+anywhere and be sure we have the same instance. We can also provide
+dependencies to the factory as usual.</font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><b>General
+advice on DI</b></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><a name="fe3a"></a>
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">Here
+are several short rules on how to work with DI in Angular:</font></font></font></p>
+<ol>
+	<li><p style="margin-bottom: 0cm; border: none; padding: 0cm; font-variant: normal; letter-spacing: normal; font-style: normal; font-weight: normal; line-height: 0.62cm; orphans: 2; widows: 2"><a name="1756"></a>
+	<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">Always
+	inject every value into your component, never rely on global
+	variables, variables from other files and so on. As a rule of thumb,
+	if you find any method of your class referencing anything other than
+	properties from that class or local variables, change your class s
+	it receives that value as an injected dependency (like we did with
+	the environment variables).</font></font></font></p>
+	<li><p style="margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.62cm; orphans: 2; widows: 2"><a name="357e"></a>
+	<span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">Never
+	use string tokens for DI. In Angular it is possible to give
+	the&nbsp;</span></span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">Inject</span></span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;decorator
+	a string for it to look up the dependency. Never do that — a typo
+	is always a possibility. Also, you cannot rely on IntelliSense to
+	autocomplete it for you. Use an&nbsp;</span></span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">InjectionToken</span></span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;instead.</span></span></span></font></font></font></span></p>
+	<li><p style="margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.62cm; orphans: 2; widows: 2"><a name="1c9f"></a>
+	<span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">Remember
+	than instances of services are shared between components at least on
+	the module level, so if any properties on that services are not
+	meant to be modified from the outside world, consider marking them
+	as&nbsp;</span></span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">readonly</span></span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">.</span></span></span></font></font></font></span></p>
+	<li><p style="margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.62cm; orphans: 2; widows: 2"><a name="8ca9"></a>
+	<span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">If
+	you are using a class to be provided instead of another one, make
+	sure you&nbsp;</span></span></span></font></font></font></span><span style="display: inline-block; border: none; padding: 0cm"><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f2f2f2"><code class="western">implement</span></span></span></span></span></font></font></font></span></code><span style="font-variant: normal"><font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">&nbsp;them
+	like we did in the second example. This way if the replaced
+	dependency’s interface changes, we will have to reimplement the
+	class that is meant to replace it, so we don’t run into cryptic
+	errors.</span></span></span></font></font></font></span></p>
+	<p style="margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.62cm; orphans: 2; widows: 2">
+	</p>
+</ol>
+<p style="font-variant: normal; font-style: normal; font-weight: normal; line-height: 0.71cm; orphans: 2; widows: 2"><a name="6752"></a>
+<font color="#292929"><font face="Liberation Serif, serif"><font size="3" style="font-size: 12pt">This
+is only some part of the power that Angular’s Dependency Injection
+mechanism can give us. So it is very important to understand it
+thoroughly to write quality code.</font></font></font></p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p style="margin-right: 1cm; margin-bottom: 0cm; border: none; padding: 0cm; line-height: 0.71cm; orphans: 2; widows: 2">
+<br/>
+
+</p>
+<p><br/>
+<br/>
+
+</p>
+</body>
+</html>
