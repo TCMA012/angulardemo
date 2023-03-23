@@ -1,0 +1,9 @@
+https://www.reddit.com/r/Angular2/comments/11z1vwa/using_content_projection_for_component/
+https://stackblitz.com/edit/angular-glh8cn?file=src%2Fmain.ts
+Using content projection for component reusability and less code duplication
+
+This question made me think about components that share bits and pieces. For instance, similar types of "cards" that all have a title. They would all need an @Input() title: string;. And you would have to write it again whenever you add a new type of card to the codebase.
+
+The idea is to write a card-title component with the Input, and then project it into the different types of cards. That way you only write the Input logic once.
+
+I have written an example here, with three types of cards: a basic text one, a "profile" one with a pic, and a "selectable" one with an Output. Plus the little "card title" component with the Input.
