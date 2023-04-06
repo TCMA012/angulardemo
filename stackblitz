@@ -1,3 +1,17 @@
 Run Angular Stackblitz project locally
 https://angular.io/start/start-deployment
 https://medium.com/@phalgun251/run-angular-stackblitz-project-locally-2b80336650d9
+
+
+
+Step 1: separate the repository id
+
+https://github.com/turingcs2005/angular_sidenav
+
+Step 2: merge with Stackbliz root URL
+
+https://stackblitz.com/github
+
+Merged: https://stackblitz.com/github/turingcs2005/angular_sidenav
+
+Open the link: https://stackblitz.com/github/turingcs2005/angular_sidenav
