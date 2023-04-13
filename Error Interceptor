@@ -1,0 +1,18 @@
+Angular Error Interceptor
+https://github.com/melcor76/global-error-handling
+https://michael-karen.medium.com/angular-error-interceptor-1abb8066359c
+https://medium.com/angular-in-depth/expecting-the-unexpected-best-practices-for-error-handling-in-angular-21c3662ef9e4
+https://angular.io/api/common/http/HttpStatusCode
+https://angular.io/api/common/http/HttpErrorResponse
+https://angular.io/api/common/http/HttpInterceptor
+https://material.angular.io/components/snack-bar/overview
+https://www.stacktracejs.com/
+
+
+
+Bugsnag, Sentry, TrackJs, and Rollbar
+front-end error tracking solutions
+
+
+
+https://medium.com/dailyjs/how-to-send-errors-into-slack-dc552e30506f
